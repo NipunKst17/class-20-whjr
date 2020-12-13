@@ -1,35 +1,58 @@
-var movingrect;
-var fixedrect;
+var car,wall,weight,speed;
+var weight1,deformation;
+var state = "start";
 
+function setup() {
+  createCanvas(1600,800);
+  car = createSprite(50, 200, 50, 50);
+  wall = createSprite(1500,200,60,height/2);
 
+}
 
-function setup()
-{
-  createCanvas(800,400);
-  movingrect = createSprite(400, 200, 50, 50);
-  movingrect.shapeColor = "green";
-  fixedrect = createSprite(100,200,50,50)
-  fixedrect.shapeColor = "green";
+function preload(){
+  
 }
 
 function draw() {
   background(255,255,255);  
 
-  movingrect.y = World.mouseY;
-  movingrect.x = World.mouseX;
+  speed = Math.round(random(55,90));
+  
+  weight = Math.round(random(400,1500));
 
-  if(movingrect.x - fixedrect.x < movingrect.width/2 + fixedrect.width/2  && 
-     fixedrect.x - movingrect.x < movingrect.width/2 + fixedrect.width/2  &&
-     movingrect.y - fixedrect.y < movingrect.height/2 + fixedrect.height/2 &&
-     fixedrect.y - movingrect.y < movingrect.height/2 + fixedrect.height/2)
-     
-  {
-    fixedrect.shapeColor = "red";
+  if(state === "start"){
+      text("press space to start",800,400);
+      if(keyWentUp("space")){
+        spawn();
+        state = "play";speed = Math.round(random(55,90));
+      }
   }
-  else
-  {
-    fixedrect.shapeColor = "green";
+
+  if(car.isTouching(wall)){
+    car.velocityX = 0;
+    deformation = (0.5 * weight1 * speedC * speedC / 22500);
+   // text(deformation,800,400);
+    
+    if(deformation < 100){
+        car.shapeColor = "green";
+    }
+
+    if((deformation === 100)||((deformation > 100) && (deformation < 180))||(deformation === 180)){
+        car.shapeColor = "yellow";
+    }
+
+    if(deformation > 180){
+       car.shapeColor = "red";
+    }
+
   }
 
   drawSprites();
+}
+
+
+function spawn(){
+    car.velocityX = speed;
+    speedC = speed;
+    weight1 = weight;
 }
